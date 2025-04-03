@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Celsius to Fahrenheit Converter</title>
+    <style>
+        body {
+            background-size: cover; /* This ensures the image covers the entire background */
+            background-position: center; /* This centers the image in the viewport */
+            background-repeat: no-repeat; /* Prevents the image from tiling */
+            /* Add other body styles as needed (font, display, etc.) */
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ensures the body takes up at least the full viewport height */
+            margin: 0;
+            color: #333; /* Default text color */
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background for content */
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        label, input, button, p {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .thermometer-container {
+            margin-top: 20px;
+        }
+        .thermometer {
+            width: 50px; /* Adjust as needed */
+            height: auto;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Celsius to Fahrenheit Converter</h1>
+        <form method="POST">
+            <label for="celsius">Enter temperature in Celsius:</label>
+            <input type="number" step="any" name="celsius" id="celsius">
+            <button type="submit">Convert</button>
+        </form>
+        {% if celsius is not none and fahrenheit is not none %}
+            <p>{{ celsius }} &deg;C is equal to {{ fahrenheit }} &deg;F</p>
+        {% endif %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <div class="thermometer-container">
+            <img src="{{ url_for('static', filename='thermometer.jpg') }}" alt="Thermometer" class="thermometer">
+        </div>
+    </div>
+
+    <script>
+        const body = document.querySelector('body');
+        const fahrenheit = {{ fahrenheit | default(None) }};
+
+        function updateBackground(tempFahrenheit) {
+            if (tempFahrenheit !== null) {
+                if (tempFahrenheit > 77) { // Example: Above 77°F is hot
+                    body.style.backgroundImage = "url('{{ url_for('static', filename='hot.jpg') }}')";
+                } else if (tempFahrenheit < 50) { // Example: Below 50°F is cold
+                    body.style.backgroundImage = "url('{{ url_for('static', filename='cold.jpg') }}')";
+                } else {
+                    body.style.backgroundImage = "url('{{ url_for('static', filename='neutral.png') }}')"; // Optional
+                    body.style.backgroundColor = '#f0f0f0'; // Fallback background color
+                }
+                body.style.color = '#333'; // Adjust text color as needed
+            } else {
+                // Default background if no temperature is available yet
+                body.style.backgroundImage = "url('{{ url_for('static', filename='neutral.jpg') }}')"; // Or a default image
+                body.style.backgroundColor = '#f0f0f0';
+                body.style.color = '#333';
+            }
+        }
+
+        updateBackground(fahrenheit);
+    </script>
+</body>
+</html>
