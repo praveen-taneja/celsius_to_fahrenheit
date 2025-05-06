@@ -1,4 +1,4 @@
-### Test driving Gemini to develop a simple webapp
+### Vibe coding a simple webapp using Gemini from Google
 
 The app converts temperature from Celsius to Fahrenheit and demos the following
 1. Using Javascript to show different background image based on the temperature.
